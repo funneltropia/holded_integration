@@ -1,3 +1,6 @@
+import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
+import { decrypt } from '@/lib/encryption';
 import { getOrCreateHoldedContact, getHoldedDocuments } from '@/lib/holded';
 
 export const dynamic = 'force-dynamic';

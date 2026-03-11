@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
 import { decrypt } from '@/lib/encryption';
 
 export const dynamic = 'force-dynamic';
