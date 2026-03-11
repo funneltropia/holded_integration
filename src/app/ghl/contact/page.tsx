@@ -18,6 +18,7 @@ function ContactIntegration() {
     const [loading, setLoading] = useState(true);
     const [loadingDocs, setLoadingDocs] = useState(true);
     const [error, setError] = useState('');
+    const [needsSetup, setNeedsSetup] = useState(false);
     const [docsError, setDocsError] = useState('');
 
     // 1. Cargar el contacto básico de GHL
@@ -35,7 +36,11 @@ function ContactIntegration() {
                 const data = await res.json();
 
                 if (!res.ok) {
-                    setError(data.error || 'Error cargando datos del contacto.');
+                    if (res.status === 404) {
+                        setNeedsSetup(true);
+                    } else {
+                        setError(data.error || 'Error cargando datos del contacto.');
+                    }
                     setLoadingDocs(false);
                 } else {
                     setContactData(data);
@@ -96,6 +101,26 @@ function ContactIntegration() {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    if (needsSetup) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+                <div className="max-w-md w-full bg-white rounded-xl shadow-lg border border-gray-100 p-8 text-center">
+                    <div className="h-16 w-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <ExternalLink className="w-8 h-8" />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">Configuración Necesaria</h2>
+                    <p className="text-gray-500 mb-6">Esta subcuenta aún no ha conectado sus API Keys de Holded y GoHighLevel.</p>
+                    <a
+                        href={`/?locationId=${locationId}`}
+                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors w-full"
+                    >
+                        Configurar Conexión
+                    </a>
+                </div>
             </div>
         );
     }
